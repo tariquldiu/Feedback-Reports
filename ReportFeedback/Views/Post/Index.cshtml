@@ -15,7 +15,8 @@
 <div>
     <span style="font-size: 20px;">Feedback Report</span> 
     <span style="float: right;">
-    <input type="text" class="form-control" placeholder="Search" ng-click="Search()"/>
+    <input type="text" class="form-control" placeholder="Search" ng-model="SearchItem" ng-change="Search(SearchItem)"/>
+        
     </span>
 </div>
 

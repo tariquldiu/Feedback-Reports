@@ -88,4 +88,17 @@ app.controller("myCtrl", function ($scope, $http) {
             alert("Error Occur");
         })
     }
+    $scope.Search = function (item) {
+        $http({
+            method: "get",
+            url: "http://localhost:6814/api/Userpost/Search",
+            datatype: "json",
+            data: JSON.stringify(item)
+        }).then(function (response) {
+            $scope.PostList = response.data;
+            console.log($scope.PostList);
+        }, function () {
+            alert("Error Occur");
+        })
+    }
 })  

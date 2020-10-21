@@ -19,15 +19,15 @@ namespace ReportFeedback.Controllers.Api
             db.Configuration.ProxyCreationEnabled = false;
 
             var posts = (from p in db.Post_tb
-                             join u in db.User_tb on p.PostId equals u.UserId
-                             select new
-                             {
-                                 PostId = p.PostId,
-                                 PostDetails = p.PostDetails,
-                                 PostDate = p.PostDate,
-                                 UserId = p.UserId,
-                                 UserName = u.UserName
-                             });
+                         join u in db.User_tb on p.PostId equals u.UserId
+                         select new
+                         {
+                             PostId = p.PostId,
+                             PostDetails = p.PostDetails,
+                             PostDate = p.PostDate,
+                             UserId = p.UserId,
+                             UserName = u.UserName
+                         });
 
 
             return Ok(posts);
@@ -42,16 +42,16 @@ namespace ReportFeedback.Controllers.Api
             var comments = (from c in db.Comment_tb
                             join u in db.User_tb on c.UserId equals u.UserId
                             select new
-                         {
-                             CommentId = c.CommentId,
-                             CommentDetails = c.CommentDetails,
-                             CommentDate = c.CommentDate,
-                             LikeCount = c.LikeCount,
-                             DislikeCount = c.DislikeCount,
-                             UserId = c.UserId,
-                             PostId = c.PostId,
-                             UserName =u.UserName
-                            }); 
+                            {
+                                CommentId = c.CommentId,
+                                CommentDetails = c.CommentDetails,
+                                CommentDate = c.CommentDate,
+                                LikeCount = c.LikeCount,
+                                DislikeCount = c.DislikeCount,
+                                UserId = c.UserId,
+                                PostId = c.PostId,
+                                UserName = u.UserName
+                            });
 
 
             return Ok(comments);
@@ -59,7 +59,7 @@ namespace ReportFeedback.Controllers.Api
         [HttpGet]
         [Route("api/Userpost/GetPagedMinus")]
         public IHttpActionResult GetPagedMinus()
-        { 
+        {
             db.Configuration.ProxyCreationEnabled = false;
 
             var posts = (from p in db.Post_tb
@@ -72,7 +72,7 @@ namespace ReportFeedback.Controllers.Api
                              UserId = p.UserId,
                              UserName = u.UserName
                          });
-            var count= posts.Count();
+            var count = posts.Count();
             var take = posts.Take(count - 1).ToList();
             return Ok(take);
         }
@@ -96,9 +96,44 @@ namespace ReportFeedback.Controllers.Api
             var take = posts.Take(count + 1).ToList();
             return Ok(take);
         }
+        [HttpGet]
+        [Route("api/Userpost/Search")]
+        public IHttpActionResult Search(string item)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            var posts = (from p in db.Post_tb
+                         join u in db.User_tb on p.PostId equals u.UserId
+                         select new
+                         {
+                             PostId = p.PostId,
+                             PostDetails = p.PostDetails,
+                             PostDate = p.PostDate,
+                             UserId = p.UserId,
+                             UserName = u.UserName
+                         });
+           
+            List<object> postList = new List<object>();
+            foreach (var post in posts)
+            {
+
+                if (post.PostDetails.Contains(item))
+                {
+                    postList.Add(post);
+
+                }
+                if (post.UserName.Contains(item))
+                {
+                    postList.Add(post);
+                }
+
+            }
+
+            return Ok(postList);
+        }
         [HttpPost]
         [Route("api/Userpost/UserCommentUpdate")]
-        public IHttpActionResult UserCommentUpdate(Comment_tb comment) 
+        public IHttpActionResult UserCommentUpdate(Comment_tb comment)
         {
             db.Configuration.ProxyCreationEnabled = false;
             Comment_tb comObj = db.Comment_tb.Where(x => x.CommentId == comment.CommentId).FirstOrDefault();
@@ -113,7 +148,7 @@ namespace ReportFeedback.Controllers.Api
             return Ok();
         }
 
-        
+
 
     }
 }
