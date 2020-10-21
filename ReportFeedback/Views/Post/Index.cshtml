@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Feedback";
+}
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/AngularjsCode.js"></script>
+<style>
+    .btn-space {
+        margin-left: -5%;
+        background-color: cornflowerblue;
+        font-size: large;
+    }
+</style>
+<br />
+<div>
+    <span style="font-size: 20px;">Feedback Report</span> 
+    <span style="float: right;">
+    <input type="text" class="form-control" placeholder="Search" ng-click="Search()"/>
+    </span>
+</div>
+
+<div ng-app="myApp">
+    <div ng-controller="myCtrl" class="divList">
+
+        <table cellpadding="12" ng-repeat="post in PostList" class="table table-bordered table-hover">
+            <tr>
+                <td style="width: 50%">
+                    <b>{{post.PostDetails}}</b>
+                </td>
+                <td style="width: 10%">
+                    <b>{{post.UserName}}</b>
+                </td>
+                <td style="width: 7%">
+                    <b>{{post.PostDate | date :  'MM/dd/yyyy'}}</b>
+                </td>
+                <td style="width: 10%; text-align:center;">
+                    <b>{{CommentList.length}} Comments</b>
+                </td>
+            </tr>
+            <tr ng-repeat="comment in CommentList" ng-if="comment.PostId == post.PostId">
+
+                <td style="width: 50%">
+                    {{comment.CommentDetails}}
+                </td>
+                <td style="width: 10%">
+                    {{comment.UserName}}
+                </td>
+                <td style="width: 7%">
+                    {{comment.CommentDate | date :  'MM/dd/yyyy'}}
+                </td>
+                <td style="width: 10%; text-align:center;">
+                    <i class="fa fa-chevron-up" style="color: green;" aria-hidden="true" ng-click="SaveAndGetLikeValue(comment);"></i> {{comment.LikeCount}} &nbsp; &nbsp; <i class="fa fa-chevron-down" style="color: red;" aria-hidden="true" ng-click="SaveAndGetDislikeValue(comment);"></i>{{comment.DislikeCount}}
+                </td>
+            </tr>
+
+        </table>
+        <span>
+            &nbsp;  <i class="fa fa-arrow-left" aria-hidden="true" style="color: green;" ng-click="GetPagedMinus();"></i>&nbsp; &nbsp; <i class="fa fa-arrow-right" style="color: green;" aria-hidden="true" ng-click="GetPagedMore();"></i> <span>{{PostList.length}} Posts</span>
+        </span>
+
+    </div>
+    @Html.Hidden("EmpID_")
+
+</div>

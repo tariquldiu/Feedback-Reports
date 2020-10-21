@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ReportFeedbackDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Comment_tb">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CommentDetails" Type="varchar" MaxLength="500" />
+          <Property Name="CommentDate" Type="datetime" />
+          <Property Name="LikeCount" Type="int" />
+          <Property Name="DislikeCount" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="PostId" Type="int" />
+        </EntityType>
+        <EntityType Name="Post_tb">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostDetails" Type="varchar" MaxLength="500" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="PostDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User_tb">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Comment_tb_Post_tb">
+          <End Role="Post_tb" Type="Self.Post_tb" Multiplicity="0..1" />
+          <End Role="Comment_tb" Type="Self.Comment_tb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post_tb">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="Comment_tb">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_tb_User_tb">
+          <End Role="User_tb" Type="Self.User_tb" Multiplicity="0..1" />
+          <End Role="Comment_tb" Type="Self.Comment_tb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_tb">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Comment_tb">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_tb_User_tb">
+          <End Role="User_tb" Type="Self.User_tb" Multiplicity="0..1" />
+          <End Role="Post_tb" Type="Self.Post_tb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_tb">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Post_tb">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportFeedbackDBModelStoreContainer">
+          <EntitySet Name="Comment_tb" EntityType="Self.Comment_tb" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post_tb" EntityType="Self.Post_tb" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_tb" EntityType="Self.User_tb" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comment_tb_Post_tb" Association="Self.FK_Comment_tb_Post_tb">
+            <End Role="Post_tb" EntitySet="Post_tb" />
+            <End Role="Comment_tb" EntitySet="Comment_tb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_tb_User_tb" Association="Self.FK_Comment_tb_User_tb">
+            <End Role="User_tb" EntitySet="User_tb" />
+            <End Role="Comment_tb" EntitySet="Comment_tb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_tb_User_tb" Association="Self.FK_Post_tb_User_tb">
+            <End Role="User_tb" EntitySet="User_tb" />
+            <End Role="Post_tb" EntitySet="Post_tb" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReportFeedbackDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Comment_tb">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommentDetails" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="LikeCount" Type="Int32" />
+          <Property Name="DislikeCount" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="PostId" Type="Int32" />
+          <NavigationProperty Name="Post_tb" Relationship="Self.FK_Comment_tb_Post_tb" FromRole="Comment_tb" ToRole="Post_tb" />
+          <NavigationProperty Name="User_tb" Relationship="Self.FK_Comment_tb_User_tb" FromRole="Comment_tb" ToRole="User_tb" />
+          <Property Name="CommentDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Post_tb">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostDetails" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Comment_tb" Relationship="Self.FK_Comment_tb_Post_tb" FromRole="Post_tb" ToRole="Comment_tb" />
+          <NavigationProperty Name="User_tb" Relationship="Self.FK_Post_tb_User_tb" FromRole="Post_tb" ToRole="User_tb" />
+        </EntityType>
+        <EntityType Name="User_tb">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Comment_tb" Relationship="Self.FK_Comment_tb_User_tb" FromRole="User_tb" ToRole="Comment_tb" />
+          <NavigationProperty Name="Post_tb" Relationship="Self.FK_Post_tb_User_tb" FromRole="User_tb" ToRole="Post_tb" />
+        </EntityType>
+        <Association Name="FK_Comment_tb_Post_tb">
+          <End Role="Post_tb" Type="Self.Post_tb" Multiplicity="0..1" />
+          <End Role="Comment_tb" Type="Self.Comment_tb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post_tb">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="Comment_tb">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_tb_User_tb">
+          <End Role="User_tb" Type="Self.User_tb" Multiplicity="0..1" />
+          <End Role="Comment_tb" Type="Self.Comment_tb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_tb">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Comment_tb">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_tb_User_tb">
+          <End Role="User_tb" Type="Self.User_tb" Multiplicity="0..1" />
+          <End Role="Post_tb" Type="Self.Post_tb" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_tb">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Post_tb">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportFeedbackDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Comment_tb" EntityType="Self.Comment_tb" />
+          <EntitySet Name="Post_tb" EntityType="Self.Post_tb" />
+          <EntitySet Name="User_tb" EntityType="Self.User_tb" />
+          <AssociationSet Name="FK_Comment_tb_Post_tb" Association="Self.FK_Comment_tb_Post_tb">
+            <End Role="Post_tb" EntitySet="Post_tb" />
+            <End Role="Comment_tb" EntitySet="Comment_tb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_tb_User_tb" Association="Self.FK_Comment_tb_User_tb">
+            <End Role="User_tb" EntitySet="User_tb" />
+            <End Role="Comment_tb" EntitySet="Comment_tb" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_tb_User_tb" Association="Self.FK_Post_tb_User_tb">
+            <End Role="User_tb" EntitySet="User_tb" />
+            <End Role="Post_tb" EntitySet="Post_tb" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReportFeedbackDBModelStoreContainer" CdmEntityContainer="ReportFeedbackDBEntities">
+          <EntitySetMapping Name="Comment_tb">
+            <EntityTypeMapping TypeName="ReportFeedbackDBModel.Comment_tb">
+              <MappingFragment StoreEntitySet="Comment_tb">
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="CommentDetails" ColumnName="CommentDetails" />
+                <ScalarProperty Name="LikeCount" ColumnName="LikeCount" />
+                <ScalarProperty Name="DislikeCount" ColumnName="DislikeCount" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Post_tb">
+            <EntityTypeMapping TypeName="ReportFeedbackDBModel.Post_tb">
+              <MappingFragment StoreEntitySet="Post_tb">
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="PostDetails" ColumnName="PostDetails" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_tb">
+            <EntityTypeMapping TypeName="ReportFeedbackDBModel.User_tb">
+              <MappingFragment StoreEntitySet="User_tb">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
